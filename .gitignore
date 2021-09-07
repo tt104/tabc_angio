@@ -1,0 +1,7 @@
+*.csv
+.snakemake/*
+data/*
+*.swp
+*.pdf
+*.pkl
+*.npy

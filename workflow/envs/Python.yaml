@@ -1,0 +1,11 @@
+name: PythonEnv
+channels:
+        - conda-forge
+dependencies:
+        - pandas
+        - numpy
+        - scikit-learn
+        - gudhi
+        - scipy
+        - matplotlib
+        - numba

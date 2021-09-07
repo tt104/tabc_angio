@@ -1,0 +1,7 @@
+name: REnv
+channels:
+        - conda-forge
+dependencies:
+        - r-genenet
+        - r-rocit
+        - r-rocr

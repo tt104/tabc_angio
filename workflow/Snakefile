@@ -1,0 +1,76 @@
+configfile: "config/config.yaml"
+
+rule all:
+	input: ["results/posteriors/image_posterior"+str(i)+".csv" for i in range(int(config["ntest"]))]+["results/posteriors/tabc_posterior"+str(i)+".csv" for i in range(int(config["ntest"]))]
+
+rule priorSamples:
+	output: "results/abcPriorSamples.csv"
+	params:
+		nsamples=config["nsamp"]
+	conda: "envs/R.yaml"
+	script: "scripts/prior.R"
+
+rule testSamples:
+	output: "results/testSamples.csv"
+	params:
+		nsamples=config["ntest"]
+	conda: "envs/R.yaml"
+	script: "scripts/prior.R"
+
+rule abcSimulations:
+	input: "results/{params}Samples.csv"
+	params:
+		index="{i}"
+	output: "results/persistence/{params}_pdata_{i}.npy","results/simulated/{params}_simdata_{i}.npy"
+	conda: "envs/Python.yaml"
+	script: "scripts/simulation.py"
+
+rule persistenceImages:
+	input: "results/persistence/{params}_pdata_{i}.npy"
+	output: "results/persistence/{params}_pimage_{i}.csv"
+	conda: "envs/Python.yaml"
+	script: "scripts/persistenceImage.py"
+
+rule pimagePriorConc:
+	input: ["results/persistence/abcPrior_pimage_"+str(i)+".csv" for i in range(int(config["nsamp"]))]
+	output: "results/abcstats/abcPrior_persistenceStats.csv"
+	shell: "cat {input} > {output}"
+
+rule pimageTestConc:
+	input: ["results/persistence/test_pimage_"+str(i)+".csv" for i in range(int(config["ntest"]))]
+	output: "results/abcstats/test_persistenceStats.csv"
+	shell: "cat {input} > {output}"
+
+rule persistencePost:
+	input: "results/abcPriorSamples.csv","results/testSamples.csv","results/abcstats/abcPrior_persistenceStats.csv","results/abcstats/test_persistenceStats.csv"
+	output: ["results/posteriors/tabc_posterior"+str(i)+".csv" for i in range(int(config["ntest"]))]
+	conda: "envs/R.yaml"
+	script: "scripts/samplePosterior.R"
+
+rule imageStats:
+	input: "results/simulated/{params}_simdata_{i}.npy"
+	output: "results/image/{params}_image_{i}.csv"
+	conda: "envs/Python.yaml"
+	script: "scripts/imageStats.py"
+
+rule imagePriorConc:
+	input: ["results/image/abcPrior_image_"+str(i)+".csv" for i in range(int(config["nsamp"]))]
+	output: "results/abcstats/abcPrior_imageStats.csv"
+	shell: "cat {input} > {output}"
+
+rule imageTestConc:
+	input: ["results/image/test_image_"+str(i)+".csv" for i in range(int(config["ntest"]))]
+	output: "results/abcstats/test_imageStats.csv"
+	shell: "cat {input} > {output}"
+
+rule imagePost:
+	input: "results/abcPriorSamples.csv","results/testSamples.csv","results/abcstats/abcPrior_imageStats.csv","results/abcstats/test_imageStats.csv"
+	output: ["results/posteriors/image_posterior"+str(i)+".csv" for i in range(int(config["ntest"]))]
+	conda: "envs/R.yaml"
+	script: "scripts/samplePosterior.R"
+
+rule plotSim:
+	input: "results/simulated/{params}_simdata_{i}.npy"
+	output: "results/plots/{params}_simulated_{i}.pdf"
+	conda: "envs/Python.yaml"
+	script: "scripts/plotSim.py"
