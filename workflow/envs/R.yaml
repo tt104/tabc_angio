@@ -5,3 +5,5 @@ dependencies:
         - r-genenet
         - r-rocit
         - r-rocr
+        - r-ggplot2
+        - r-colorspace

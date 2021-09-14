@@ -69,6 +69,19 @@ rule imagePost:
 	conda: "envs/R.yaml"
 	script: "scripts/samplePosterior.R"
 
+# Posterior entropy, MSE
+
+# Posterior plot
+rule posteriorPlot:
+	input: "results/posteriors/{params}_posterior{i}.csv","results/testSamples.csv"
+	params:
+		index="{i}"
+	output: "results/plots/{params}_posterior{i}.pdf"
+	conda: "envs/R.yaml"
+	script: "scripts/plotPosterior.R"
+
+# Posterior predictive sampling
+
 rule plotSim:
 	input: "results/simulated/{params}_simdata_{i}.npy"
 	output: "results/plots/{params}_simulated_{i}.pdf"
