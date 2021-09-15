@@ -1,6 +1,6 @@
-nsamp: 100
+nsamp: 10000
 ntest: 10
-npost: 10
+npost: 500
 npred: 5
 pi_dim: 50
 pi_bw: 1.0
