@@ -5,9 +5,10 @@ posterior_plots = ["results/plots/image_posterior"+str(i)+".pdf" for i in range(
 bench = ["results/benchmark.csv","results/plots/Entropy.pdf","results/plots/RSSE.pdf"]
 pred = ["results/plots/predictive/image_pred_"+str(i)+"_"+str(j)+".pdf" for i in range(int(config["ntest"])) for j in range(int(config["npred"]))]+["results/plots/predictive/tabc_pred_"+str(i)+"_"+str(j)+".pdf" for i in range(int(config["ntest"])) for j in range(int(config["npred"]))]
 test_sims = ["results/plots/test_simulated_"+str(i)+".pdf" for i in range(int(config["ntest"]))]
+test_pimages = ["results/plots/test_pimage_"+str(i)+"_dim_0.pdf" for i in range(int(config["ntest"]))]
 
 rule all:
-	input: bench+posterior_plots+pred+test_sims
+	input: bench+posterior_plots+pred+test_sims+test_pimages
 
 rule priorSamples:
 	output: "results/abcPriorSamples.csv"
@@ -117,3 +118,10 @@ rule plotSim:
 	output: "results/plots/{params}_simulated_{i}.pdf"
 	conda: "envs/Python.yaml"
 	script: "scripts/plotSim.py"
+
+rule plotPersist:
+	input: "results/persistence/{params}_pimage_{i}.csv"
+	output: "results/plots/{params}_pimage_{i}_dim_0.pdf","results/plots/{params}_pimage_{i}_dim_1.pdf","results/plots/{params}_pimage_{i}_dim_2.pdf",
+	conda: "envs/Python.yaml"
+	script: "scripts/plotPersistence.py"
+
