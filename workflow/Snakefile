@@ -2,7 +2,7 @@ configfile: "config/config.yaml"
 
 all_posteriors = ["results/posteriors/image_posterior"+str(i)+".csv" for i in range(int(config["ntest"]))]+["results/posteriors/tabc_posterior"+str(i)+".csv" for i in range(int(config["ntest"]))]
 posterior_plots = ["results/plots/image_posterior"+str(i)+".pdf" for i in range(int(config["ntest"]))]+["results/plots/tabc_posterior"+str(i)+".pdf" for i in range(int(config["ntest"]))]
-bench = ["results/benchmark.csv","results/plots/Entropy.pdf","results/plots/RSSE.pdf"]
+bench = ["results/benchmark.csv","results/benchmarkMean.csv"] #"results/plots/Entropy.pdf","results/plots/RSSE.pdf"]
 pred = ["results/plots/predictive/image_pred_"+str(i)+"_"+str(j)+".pdf" for i in range(int(config["ntest"])) for j in range(int(config["npred"]))]+["results/plots/predictive/tabc_pred_"+str(i)+"_"+str(j)+".pdf" for i in range(int(config["ntest"])) for j in range(int(config["npred"]))]
 test_sims = ["results/plots/test_simulated_"+str(i)+".pdf" for i in range(int(config["ntest"]))]
 test_pimages = ["results/plots/test_pimage_"+str(i)+"_dim_0.pdf" for i in range(int(config["ntest"]))]
@@ -79,9 +79,15 @@ rule imagePost:
 # Posterior entropy, RSSE
 rule posteriorBenchPlot:
 	input: ["results/testSamples.csv"]+all_posteriors
-	output: "results/benchmark.csv","results/plots/Entropy.pdf","results/plots/RSSE.pdf"
+	output: "results/plots/Entropy.pdf","results/plots/RSSE.pdf"
 	conda: "envs/R.yaml"
 	script: "scripts/plotBench.R"
+
+rule posteriorBenchTables:
+	input: ["results/testSamples.csv"]+all_posteriors
+	output: "results/benchmark.csv","results/benchmarkMean.csv",
+	conda: "envs/R.yaml"
+	script: "scripts/calcBench.R"
 
 # Posterior plot
 rule posteriorPlot:

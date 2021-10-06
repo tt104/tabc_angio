@@ -1,5 +1,4 @@
 library(FNN)
-library(ggplot2)
 
 ntest<-snakemake@config[["ntest"]]
 
@@ -35,12 +34,9 @@ for(i in c(1:ntest))
 benchdf<-data.frame(test=1:ntest,Statistics="Image",Entropy=im_ents,RSSE=im_rsse)
 benchdf<-rbind(benchdf,data.frame(test=1:ntest,Statistics="Topological",Entropy=tabc_ents,RSSE=tabc_rsse))
 
-pdf(snakemake@output[[1]],width=6,height=5)
-p<-ggplot(benchdf)+geom_col(aes(x=test,y=Entropy,fill=Statistics),position=position_dodge())+xlab("Data set")+scale_x_continuous(breaks=1:10)
-print(p)
-dev.off()
+write.table(benchdf,snakemake@output[[1]],row.names=FALSE,col.names=TRUE,sep=',')
 
-pdf(snakemake@output[[2]],width=6,height=5)
-p<-ggplot(benchdf)+geom_col(aes(x=test,y=RSSE,fill=Statistics),position=position_dodge())+xlab("Data set")+scale_x_continuous(breaks=1:10)
-print(p)
-dev.off()
+meanstats<-data.frame(Statistics="Image",MeanEntropy=mean(benchdf[benchdf$Statistic=="Image","Entropy"],MeanRSSE=mean(benchdf[benchdf$Statistic=="Image","RSSE"])
+meanstats<-rbind(meanstats,data.frame(Statistics="Topological",MeanEntropy=mean(benchdf[benchdf$Statistic=="Topological","Entropy"],MeanRSSE=mean(benchdf[benchdf$Statistic=="Image","RSSE"]))
+
+write.table(meanstats,snakemake@output[[2]],row.names=FALSE,col.names=TRUE,sep=',')
