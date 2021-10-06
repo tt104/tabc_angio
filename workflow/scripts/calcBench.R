@@ -37,6 +37,6 @@ benchdf<-rbind(benchdf,data.frame(test=1:ntest,Statistics="Topological",Entropy=
 write.table(benchdf,snakemake@output[[1]],row.names=FALSE,col.names=TRUE,sep=',')
 
 meanstats<-data.frame(Statistics="Image",MeanEntropy=mean(benchdf[benchdf$Statistic=="Image","Entropy"]),MeanRSSE=mean(benchdf[benchdf$Statistic=="Image","RSSE"]))
-meanstats<-rbind(meanstats,data.frame(Statistics="Topological",MeanEntropy=mean(benchdf[benchdf$Statistic=="Topological","Entropy"]),MeanRSSE=mean(benchdf[benchdf$Statistic=="Image","RSSE"]))
+meanstats<-rbind(meanstats,data.frame(Statistics="Topological",MeanEntropy=mean(benchdf[benchdf$Statistic=="Topological","Entropy"]),MeanRSSE=mean(benchdf[benchdf$Statistic=="Image","RSSE"])))
 
 write.table(meanstats,snakemake@output[[2]],row.names=FALSE,col.names=TRUE,sep=',')
