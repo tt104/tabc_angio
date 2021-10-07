@@ -44,6 +44,6 @@ meanstats<-data.frame(Statistics="Image",MeanEntropy=mean(imageEntropy),SEEntrop
 topEntropy<-benchdf[benchdf$Statistic=="Topological","Entropy"]
 topRSSE<-benchdf[benchdf$Statistic=="Topological","RSSE"]
 
-meanstats<-rbind(meanstats,data.frame(Statistics="Topological",MeanEntropy=mean(topEntropy),SEEntropy=2*sqrt(var(topEntropy)/length(topEntropy)),MeanRSSE=mean(topRSSE)),SERSSE=2*sqrt(var(topRSSE)/length(topRSSE)))
+meanstats<-rbind(meanstats,data.frame(Statistics="Topological",MeanEntropy=mean(topEntropy),SEEntropy=2*sqrt(var(topEntropy)/length(topEntropy)),MeanRSSE=mean(topRSSE),SERSSE=2*sqrt(var(topRSSE)/length(topRSSE))))
 
 write.table(meanstats,snakemake@output[[2]],row.names=FALSE,col.names=TRUE,sep=',')
