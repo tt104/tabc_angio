@@ -36,7 +36,14 @@ benchdf<-rbind(benchdf,data.frame(test=1:ntest,Statistics="Topological",Entropy=
 
 write.table(benchdf,snakemake@output[[1]],row.names=FALSE,col.names=TRUE,sep=',')
 
-meanstats<-data.frame(Statistics="Image",MeanEntropy=mean(benchdf[benchdf$Statistic=="Image","Entropy"]),MeanRSSE=mean(benchdf[benchdf$Statistic=="Image","RSSE"]))
-meanstats<-rbind(meanstats,data.frame(Statistics="Topological",MeanEntropy=mean(benchdf[benchdf$Statistic=="Topological","Entropy"]),MeanRSSE=mean(benchdf[benchdf$Statistic=="Topological","RSSE"])))
+imageEntropy<-benchdf[benchdf$Statistic=="Image","Entropy"]
+imageRSSE<-benchdf[benchdf$Statistic=="Image","RSSE"]
+
+meanstats<-data.frame(Statistics="Image",MeanEntropy=mean(imageEntropy),SEEntropy=2*sqrt(var(imageEntropy)/length(imageEntropy)),MeanRSSE=mean(imageRSSE),SERSSE=2*sqrt(var(imageRSSE)/length(imageRSSE)))
+
+topEntropy<-benchdf[benchdf$Statistic=="Topological","Entropy"]
+topRSSE<-benchdf[benchdf$Statistic=="Topological","RSSE"]
+
+meanstats<-rbind(meanstats,data.frame(Statistics="Topological",MeanEntropy=mean(topEntropy),SEEntropy=2*sqrt(var(topEntropy)/length(topEntropy)),MeanRSSE=mean(topRSSE)),SERSSE=2*sqrt(var(topRSSE)/length(topRSSE)))
 
 write.table(meanstats,snakemake@output[[2]],row.names=FALSE,col.names=TRUE,sep=',')

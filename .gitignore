@@ -1,7 +1,7 @@
 *.csv
 .snakemake/*
 workflow/.snakemake/*
-data/*
+results/*
 *.swp
 *.pdf
 *.pkl

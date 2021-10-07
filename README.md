@@ -6,5 +6,5 @@ The code is formatted as a [Snakemake](https://snakemake.github.io/) workflow th
 
 	snakemake --use-conda --cores N
 
-where N is the number of CPU cores to use in the workflow. Outputs are placed in the results folder, with the file *benchmarks.csv* containing the metrics calculated in the paper and the plots folder containing plots of the metrics, posteriors and posterior predictive simulations.
+where N is the number of CPU cores to use in the workflow. Outputs are placed in the results folder, with the files *benchmarks.csv* and *benchmarksMean.csv* containing the metrics calculated in the paper and the plots folder containing plots of the posteriors and posterior predictive simulations.
 
